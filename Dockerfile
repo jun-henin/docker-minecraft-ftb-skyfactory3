@@ -19,10 +19,10 @@ RUN apt-get install -y wget unzip
 RUN mkdir /tmp/feed-the-beast 
 
 # Download zip server file from https://www.curseforge.com/minecraft/modpacks/ftb-presents-skyfactory-3/files
-COPY FTB_Presents_SkyFactory_3_Server_${VERSION}.zip /tmp/feed-the-beast/FTBServer.zip
+#COPY FTB_Presents_SkyFactory_3_Server_${VERSION}.zip /tmp/feed-the-beast/FTBServer.zip
 
 RUN cd /tmp/feed-the-beast &&\
-  #wget -c https://media.forgecdn.net/files/2481/284/FTBPresentsSkyfactory3Server_${VERSION}.zip -O FTBSkyfactoryServer.zip &&\
+  wget -c https://www.shop-from-japan.com/minecraft/FTB_Presents_SkyFactory_3_Server_3_0_21.zip -O FTBServer.zip &&\
   #cp /FTB_Presents_SkyFactory_3_Server_3_0_21.zip FTBSkyfactoryServer.zip &&\
   unzip FTBServer.zip && \
   rm FTBServer.zip && \
