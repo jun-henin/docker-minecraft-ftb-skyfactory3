@@ -1,35 +1,54 @@
-# This is based on itzg/minecraft-server
+# This Docker file builds a basic minecraft server
+# directly from the default minecraft server from Mojang
+#
+#FROM ubuntu:20.04
+#FROM java:8
+FROM openjdk:8 AS build
 
-FROM java:8
+ENV SERVER_MESSAGE="FTB (CurseForge) SkyFactory 3"
+ENV VERSION=3_0_21
+MAINTAINER jhe “jun.henin.biz@gmail.com”
+RUN apt-get update
+RUN apt-get install -y default-jdk
+RUN apt-get install -y wget unzip
 
-MAINTAINER Jayson Reis <santosdosreis@gmail.com>
+#RUN addgroup --gid 1234 minecraft
+#RUN adduser --disabled-password --home=/data --uid 1234 --gid 1234 --gecos "minecraft user" minecraft
 
-ENV VERSION=3.0.15
+#RUN mkdir minecraft
+RUN mkdir /tmp/feed-the-beast 
 
-RUN apt-get update && apt-get install -y wget unzip
-RUN addgroup --gid 1234 minecraft
-RUN adduser --disabled-password --home=/data --uid 1234 --gid 1234 --gecos "minecraft user" minecraft
+# Download zip server file from https://www.curseforge.com/minecraft/modpacks/ftb-presents-skyfactory-3/files
+COPY FTB_Presents_SkyFactory_3_Server_${VERSION}.zip /tmp/feed-the-beast/FTBServer.zip
 
-RUN mkdir /tmp/feed-the-beast && cd /tmp/feed-the-beast && \
-	wget -c https://media.forgecdn.net/files/2481/284/FTBPresentsSkyfactory3Server_${VERSION}.zip -O FTBInfinityServer.zip && \
-	unzip FTBInfinityServer.zip && \
-	rm FTBInfinityServer.zip && \
-	bash -x FTBInstall.sh && \
-	chown -R minecraft /tmp/feed-the-beast
+RUN cd /tmp/feed-the-beast &&\
+  #wget -c https://media.forgecdn.net/files/2481/284/FTBPresentsSkyfactory3Server_${VERSION}.zip -O FTBSkyfactoryServer.zip &&\
+  #cp /FTB_Presents_SkyFactory_3_Server_3_0_21.zip FTBSkyfactoryServer.zip &&\
+  unzip FTBServer.zip && \
+  rm FTBServer.zip && \
+  bash -x Install.sh  
+  #bash -x Install.sh
+# && \
+#  chown -R minecraft /tmp/feed-the-beast
 
-
-USER minecraft
+#USER minecraft
 
 EXPOSE 25565
 
 ADD start.sh /start
 
-VOLUME /data
+#VOLUME /data
 ADD server.properties /tmp/server.properties
-WORKDIR /data
+#WORKDIR /data
 
 CMD /start
 
-ENV MOTD A Minecraft (FTB SkyFactory 3 ${VERSION}) Server Powered by Docker
+ENV MOTD Minecraft (${SERVER_MESSAGE} ${VERSION}) Server Powered by (jhe) Docker
 ENV LEVEL world
 ENV JVM_OPTS -Xms2048m -Xmx2048m
+
+RUN echo "eula=true" > eula.txt
+
+#CMD java -Xms2048m -Xmx2048m -jar /tmp/feed-the-beast/FTBserver-*.jar nogui
+
+#RUN cd /tmp/feed-the-beast && bash -x ServerStart.sh
