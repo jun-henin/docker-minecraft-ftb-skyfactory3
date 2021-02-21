@@ -6,10 +6,10 @@
 FROM openjdk:8 AS build
 
 #-------------------------------------
-ENV SERVER_MESSAGE="FTB SkyFactory 3"
-ENV MODE_ID=25
-ENV VERSION_ID=123
-ENV VERSION_NAME=3.0.21
+ENV SERVER_MESSAGE="FTB Stoneblock 2"
+ENV MODE_ID=4
+ENV VERSION_ID=153
+ENV VERSION_NAME=1.21.1
 #-------------------------------------
 
 
