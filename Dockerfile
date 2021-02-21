@@ -9,9 +9,11 @@ FROM openjdk:8 AS build
 ENV SERVER_MESSAGE="FTB SkyFactory 3"
 ENV MODE_ID=25
 ENV VERSION_ID=123
+ENV VERSION_NAME=3.0.21
 #-------------------------------------
 
-ENV VERSION=${MODE_ID}/${VERSION_ID}
+
+ENV VERSION="${VERSION_NAME} (${MODE_ID}/${VERSION_ID})"
 MAINTAINER jhe “jun.henin.biz@gmail.com”
 RUN apt-get update
 RUN apt-get install -y default-jdk
@@ -50,7 +52,7 @@ ADD server.properties /tmp/server.properties
 
 CMD /start
 
-ENV MOTD Minecraft (${SERVER_MESSAGE} ${VERSION}) Server Powered by (jhe) Docker
+ENV MOTD ${SERVER_MESSAGE} ${VERSION} Server Powered by (jhe) Docker
 ENV LEVEL world
 ENV JVM_OPTS -Xms2048m -Xmx2048m
 
