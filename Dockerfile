@@ -42,7 +42,7 @@ RUN cd /tmp/feed-the-beast &&\
 
 #USER minecraft
 
-COPY Dynmap-3.0.1-spigot.jar /tmp/feed-the-beast/mods/Dynmap-3.0.1-spigot.jar
+COPY Dynmap-3.1-beta6-forge-1.12.2.jar /tmp/feed-the-beast/mods/Dynmap-3.1-beta6-forge-1.12.2.jar
 
 
 EXPOSE 25565
