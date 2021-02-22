@@ -42,7 +42,11 @@ RUN cd /tmp/feed-the-beast &&\
 
 #USER minecraft
 
+COPY Dynmap-3.1-beta6-forge-1.12.2.jar /tmp/feed-the-beast/mods/Dynmap-3.1-beta6-forge-1.12.2.jar
+
 EXPOSE 25565
+EXPOSE 8123
+EXPOSE 25575
 
 ADD start.sh /start
 
