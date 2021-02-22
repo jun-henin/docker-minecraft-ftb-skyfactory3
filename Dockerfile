@@ -6,10 +6,10 @@
 FROM openjdk:8 AS build
 
 #-------------------------------------
-ENV SERVER_MESSAGE="FTB SkyFactory 3"
-ENV MODE_ID=25
-ENV VERSION_ID=123
-ENV VERSION_NAME=3.0.21
+ENV SERVER_MESSAGE="FTB University"
+ENV MODE_ID=52
+ENV VERSION_ID=216
+ENV VERSION_NAME=1.2.1
 #-------------------------------------
 
 
@@ -42,7 +42,12 @@ RUN cd /tmp/feed-the-beast &&\
 
 #USER minecraft
 
+COPY Dynmap-3.0.1-spigot.jar /tmp/feed-the-beast/mods/Dynmap-3.0.1-spigot.jar
+
+
 EXPOSE 25565
+EXPOSE 8123
+EXPOSE 25575
 
 ADD start.sh /start
 
@@ -55,6 +60,8 @@ CMD /start
 ENV MOTD ${SERVER_MESSAGE} ${VERSION} Server Powered by (jhe) Docker
 ENV LEVEL world
 ENV JVM_OPTS -Xms2048m -Xmx2048m
+
+ENV ENABLE_RCON=true RCON_PORT=25575 RCON_PASSWORD=jheminecraft
 
 RUN echo "eula=true" > eula.txt
 
