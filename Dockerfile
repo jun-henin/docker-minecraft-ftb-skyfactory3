@@ -1,20 +1,21 @@
 # This Docker file builds a basic minecraft server
 # directly from the default minecraft server from Mojang
 #
-#FROM ubuntu:20.04
-#FROM java:8
 FROM openjdk:8 AS build
 
 #-------------------------------------
-ENV SERVER_MESSAGE="FTB Stoneblock 2"
-ENV MODE_ID=4
-ENV VERSION_ID=153
-ENV VERSION_NAME=1.21.1
+ENV SERVER_MESSAGE="Minecraft Paper"
+ENV VERSION_ID=485
+ENV VERSION_NAME=1.16.5
+ENV MC_SERVER_URL=https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/485/downloads/paper-1.16.5-485.jar
+ENV DATAPACK_ADVANCE_FILE=BlazeandCaves_Advancements_Pack_1.11.5.zip
+#ENV DATAPACK_ADVANCE=https://download851.mediafire.com/bcvtfcarjo8g/t4ayv8ku84mhbph/BlazeandCave%5C%27s+Advancements+Pack+1.11.5.zip
+ENV DYNMAP_FILE=Dynmap-3.1-beta7-spigot.jar
 #-------------------------------------
 
 
-ENV VERSION="${VERSION_NAME} (${MODE_ID}/${VERSION_ID})"
-MAINTAINER jhe “jun.henin.biz@gmail.com”
+ENV VERSION="${VERSION_NAME} (${VERSION_ID})"
+MAINTAINER jhe
 RUN apt-get update
 RUN apt-get install -y default-jdk
 RUN apt-get install -y wget unzip
@@ -24,29 +25,36 @@ RUN apt-get install -y wget unzip
 #USER minecraft
 
 #RUN mkdir minecraft
-RUN mkdir /tmp/feed-the-beast 
+RUN mkdir /tmp/mc-paper 
+RUN mkdir /tmp/mc-paper/world && mkdir /tmp/mc-paper/world/datapacks
 
 # Download zip server file from https://www.curseforge.com/minecraft/modpacks/ftb-presents-skyfactory-3/files
-#COPY FTB_Presents_SkyFactory_3_Server_${VERSION}.zip /tmp/feed-the-beast/FTBServer.zip
+#COPY FTB_Presents_SkyFactory_3_Server_${VERSION}.zip /tmp/mc-paper/FTBServer.zip
+COPY ${DATAPACK_ADVANCE_FILE} /tmp/mc-paper/world/datapacks/dp_advance.zip
 
-RUN cd /tmp/feed-the-beast &&\
-  wget -c https://api.modpacks.ch/public/modpack/${MODE_ID}/${VERSION_ID}/server/linux -O FTBServerInstall_${MODE_ID}_${VERSION_ID} &&\
-  #wget -c https://www.shop-from-japan.com/minecraft/FTB_Presents_SkyFactory_3_Server_3_0_21.zip -O FTBServer.zip &&\
+
+RUN cd /tmp/mc-paper &&\
+  wget -c ${MC_SERVER_URL} -O ServerInstall-paper.jar &&\
+  #wget -c ${DATAPACK_ADVANCE} -O world/datapacks/dp_advance.zip &&\
+  unzip world/datapacks/dp_advance.zip -d world/datapacks && rm world/datapacks/dp_advance.zip 
+  #&& \
+
   #cp /FTB_Presents_SkyFactory_3_Server_3_0_21.zip FTBSkyfactoryServer.zip &&\
-  chmod +x ./FTBServerInstall_${MODE_ID}_${VERSION_ID} && \
-  ./FTBServerInstall_${MODE_ID}_${VERSION_ID} --auto && \
-  rm FTBServerInstall_${MODE_ID}_${VERSION_ID}  
+  #chmod +x ./ServerInstall-paper.jar && \
+  #./ServerInstall-paper.jar --auto && \
+  #rm ServerInstall-paper.jar  
   #bash -x Install.sh
 # && \
-#  chown -R minecraft /tmp/feed-the-beast
+#  chown -R minecraft /tmp/mc-paper
 
 #USER minecraft
 
-COPY Dynmap-3.1-beta6-forge-1.12.2.jar /tmp/feed-the-beast/mods/Dynmap-3.1-beta6-forge-1.12.2.jar
+COPY ${DYNMAP_FILE} /tmp/mc-paper/plugins/${DYNMAP_FILE}
+
 
 EXPOSE 25565
 EXPOSE 8123
-EXPOSE 25575
+EXPOSE 25576
 
 ADD start.sh /start
 
@@ -58,10 +66,12 @@ CMD /start
 
 ENV MOTD ${SERVER_MESSAGE} ${VERSION} Server Powered by (jhe) Docker
 ENV LEVEL world
-ENV JVM_OPTS -Xms2048m -Xmx2048m
+ENV JVM_OPTS -Xms2G -Xmx2G
+
+ENV ENABLE_RCON=true
 
 RUN echo "eula=true" > eula.txt
 
-#CMD java -Xms2048m -Xmx2048m -jar /tmp/feed-the-beast/FTBserver-*.jar nogui
+#CMD java -Xms2048m -Xmx2048m -jar /tmp/mc-paper/FTBserver-*.jar nogui
 
-#RUN cd /tmp/feed-the-beast && bash -x ServerStart.sh
+#RUN cd /tmp/mc-paper && bash -x ServerStart.sh
