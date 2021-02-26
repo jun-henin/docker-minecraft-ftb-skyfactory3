@@ -12,6 +12,7 @@ ENV DATAPACK_ADVANCE_FILE=BlazeandCaves_Advancements_Pack_1.11.5.zip
 #ENV DATAPACK_ADVANCE=https://download851.mediafire.com/bcvtfcarjo8g/t4ayv8ku84mhbph/BlazeandCave%5C%27s+Advancements+Pack+1.11.5.zip
 ENV DYNMAP_FILE=Dynmap-3.1-beta7-spigot.jar
 #-------------------------------------
+ENV SEED=572779209
 
 
 ENV VERSION="${VERSION_NAME} (${VERSION_ID})"
