@@ -1,7 +1,7 @@
 # This Docker file builds a basic minecraft server
 # directly from the default minecraft server from Mojang
 #
-FROM openjdk:8 AS build
+FROM openjdk:11 AS build
 
 #-------------------------------------
 ENV SERVER_MESSAGE="Minecraft Paper"
