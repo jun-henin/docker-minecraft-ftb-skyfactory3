@@ -55,7 +55,7 @@ COPY ${DYNMAP_FILE} /tmp/mc-paper/plugins/${DYNMAP_FILE}
 
 EXPOSE 25565
 EXPOSE 8123
-EXPOSE 25576
+EXPOSE 25575
 
 ADD start.sh /start
 
